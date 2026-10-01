@@ -22,6 +22,22 @@ Tudo que for fictício aparece marcado como **DEMO** (produtos, clientes, vendas
 usuários). Em **Configurações › Sistema** há o botão **Limpar dados DEMO**
 (com confirmação dupla).
 
+## Publicar no Netlify
+
+O site precisa ser construído pelo próprio Netlify (Next.js com funções de servidor).
+
+1. No Netlify: **Add new site › Import an existing project › GitHub** e escolha o
+   repositório **FC-BRA** (ou use o botão:
+   [Deploy to Netlify](https://app.netlify.com/start/deploy?repository=https://github.com/Rodrigo98-stack/FC-BRA)).
+2. Nome do site: **fc-bra**. Build command e pasta já vêm do `netlify.toml`
+   (`npm run build`, `.next`).
+3. Em *Environment variables*, cadastre pelo menos **`SETUP_TOKEN`** (código do
+   primeiro acesso). Para operar com banco real, cadastre também `DATABASE_URL` e
+   `APP_SECRET` (veja “Conectar o Supabase”).
+4. **Deploy**. Cada novo commit na branch `main` publica automaticamente.
+
+Sem `DATABASE_URL`, o site sobe em modo demonstração (dados DEMO, salvos no Netlify Blobs).
+
 ## Primeiro acesso ao painel
 
 1. Acesse `/admin`. Sem nenhum administrador cadastrado, o sistema abre **Primeiro acesso**.
