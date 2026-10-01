@@ -8,12 +8,12 @@ arquitetura, diagrama de entidades e plano de implementação.
 | Item | Resultado |
 |---|---|
 | Arquivos existentes | Projeto novo (repositório `FC-BRA` vazio). Nada a preservar. |
-| Projetos do usuário | `COMUNICA-`, `HP-BARBER-STUDIO` e os projetos Supabase existentes **não foram alterados**. |
+| Projetos do usuário | `COMUNICA-` e `HP-BARBER-STUDIO` **não foram alterados**. O projeto Supabase `AGENTE-DE-TRAFEGO-CRM` foi **pausado a pedido do usuário** (sem apagar dados) para liberar a cota do plano gratuito. |
 | Stack instalada | Nenhuma. Stack proposta conforme §29.1. |
 | Banco e migrations | Nenhum. Criado em `supabase/migrations/`. |
 | `.env.example` | Criado, com todas as variáveis documentadas. |
 | Hospedagem | Netlify (pedido do usuário) em vez de Vercel (§29.1 permite “ambiente do usuário”). |
-| Supabase | A organização do usuário já tem 2 projetos ativos (limite do plano gratuito). Para não pausar nem alterar projetos existentes, o sistema sobe em **modo demonstração** e passa a usar o Supabase quando `DATABASE_URL` for configurada. |
+| Supabase | Projeto `FC-BRA` (região São Paulo) com as migrations 0001–0004 aplicadas. O site usa esse banco quando `DATABASE_URL` está configurada no Netlify; sem ela, sobe em **modo demonstração**. |
 
 ### Riscos e decisões
 
@@ -48,7 +48,7 @@ WhatsApp ──► LinkDriver (wa.me) | CloudApiDriver (Meta Cloud API)
 
 | Caminho | Conteúdo |
 |---|---|
-| `supabase/migrations/` | `0001` esquema, `0002` dados-base (marcas, categorias, papéis, permissões, modelos de mensagem, CMS com placeholders), `0003` segurança (`has_permission()` + RLS) |
+| `supabase/migrations/` | `0001` esquema, `0002` dados-base (marcas, categorias, papéis, permissões, modelos de mensagem, CMS com placeholders), `0003` segurança (`has_permission()` + RLS), `0004` ajustes do Security Advisor |
 | `src/server/db/` | Conexão (postgres.js / PGlite), esquema Drizzle, aplicador de migrations, carga DEMO |
 | `src/server/auth/` | Hash de senha (scrypt), tokens, sessões |
 | `src/server/rbac.ts` | Permissões efetivas (papéis × marca + permissões avulsas) |
