@@ -283,7 +283,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     fields: [
       { name: "brandId", label: "Marca", type: "brand", required: true },
       { name: "placement", label: "Posição", type: "select", required: true, options: BANNER_PLACEMENT_LABELS, defaultValue: "home_hero" },
-      { name: "imageUrl", label: "Imagem", type: "image", required: true, wide: true, help: "Recomendado: 1600×900 px (home) ou 1200×900 px (secundário)." },
+      { name: "imageUrl", label: "Imagem", type: "image", required: true, wide: true, help: "Recomendado: 1200×1500 px na vertical (destaque da home) ou 1200×900 px (secundário)." },
       { name: "title", label: "Título", type: "text", max: 120 },
       { name: "subtitle", label: "Subtítulo", type: "text", max: 200 },
       { name: "ctaLabel", label: "Texto do botão", type: "text", max: 40 },

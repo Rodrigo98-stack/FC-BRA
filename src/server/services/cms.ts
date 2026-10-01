@@ -11,8 +11,18 @@ import type { AuthContext } from "../auth/session";
 
 export type Palette = { primary: string; secondary: string; accent: string; text: string; background: string };
 
+/** Estilo visual da loja: "classico" (traço fino, serifa) ou "urbano" (grafite, textura). */
+export type BrandLook = "classico" | "urbano";
+export const LOOK_OPTIONS: { value: BrandLook; label: string }[] = [
+  { value: "classico", label: "Clássico — traço fino, luz suave" },
+  { value: "urbano", label: "Urbano — grafite, textura e brilho" },
+];
+
 export type BrandIdentity = {
   logo_url: string | null;
+  /** O arquivo do logo já traz o nome escrito (não repetir o nome ao lado). */
+  logo_shows_name: boolean;
+  look: BrandLook;
   logo_placeholder: string;
   favicon_url: string | null;
   tagline: string | null;
@@ -62,6 +72,8 @@ export const POLICY_LABELS: Record<keyof BrandPolicies, string> = {
 const DEFAULT_BRAND: BrandCms = {
   identity: {
     logo_url: null,
+    logo_shows_name: false,
+    look: "classico",
     logo_placeholder: "[LOGO — A DEFINIR]",
     favicon_url: null,
     tagline: null,

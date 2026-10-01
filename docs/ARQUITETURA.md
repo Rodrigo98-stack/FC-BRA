@@ -48,7 +48,7 @@ WhatsApp ──► LinkDriver (wa.me) | CloudApiDriver (Meta Cloud API)
 
 | Caminho | Conteúdo |
 |---|---|
-| `supabase/migrations/` | `0001` esquema, `0002` dados-base (marcas, categorias, papéis, permissões, modelos de mensagem, CMS com placeholders), `0003` segurança (`has_permission()` + RLS), `0004` ajustes do Security Advisor |
+| `supabase/migrations/` | `0001` esquema, `0002` dados-base (marcas, categorias, papéis, permissões, modelos de mensagem, CMS com placeholders), `0003` segurança (`has_permission()` + RLS), `0004` ajustes do Security Advisor, `0005` logos oficiais e estilo visual de cada marca |
 | `src/server/db/` | Conexão (postgres.js / PGlite), esquema Drizzle, aplicador de migrations, carga DEMO |
 | `src/server/auth/` | Hash de senha (scrypt), tokens, sessões |
 | `src/server/rbac.ts` | Permissões efetivas (papéis × marca + permissões avulsas) |

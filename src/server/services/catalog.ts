@@ -24,6 +24,8 @@ export type ProductCard = {
   price: number;
   image: string | null;
   imageAlt: string | null;
+  /** Segunda foto (troca ao passar o mouse no card). */
+  image2: string | null;
   isNew: boolean;
   isDemo: boolean;
   stock: number;
@@ -183,7 +185,8 @@ async function hydrateCards(
   ]);
   const newSince = Date.now() - days * 86400_000;
   return rows.map((r) => {
-    const img = images.find((i) => i.productId === r.id);
+    const own = images.filter((i) => i.productId === r.id);
+    const img = own[0];
     const colorMap = new Map<string, { name: string | null; hex: string | null }>();
     for (const v of variants.filter((v) => v.productId === r.id)) {
       const key = `${v.color ?? ""}|${v.hex ?? ""}`;
@@ -202,6 +205,7 @@ async function hydrateCards(
       price: promo ?? sale,
       image: img?.url ?? null,
       imageAlt: img?.alt ?? r.name,
+      image2: own[1]?.url ?? null,
       isNew: r.isNew || r.createdAt.getTime() > newSince,
       isDemo: r.isDemo,
       stock: Number(r.stock),

@@ -85,8 +85,10 @@ Netlify — nunca no código.
 
 Nada é inventado: o que não foi informado aparece como **“Configuração pendente”**.
 
-- **Configurações › (marca) › Identidade visual**: logo, favicon, cores oficiais
-  (as atuais são *placeholders* sugeridos), fontes.
+- **Configurações › (marca) › Identidade visual**: os logos oficiais da FINA CLÁSSICA e da
+  BRAVUS já estão instalados (arquivos em `public/brand/`), assim como os favicons. As
+  cores da BRAVUS foram tiradas do logo (grafite e dourado); confirme ou troque pelas
+  oficiais. Ali também ficam as fontes e o **estilo visual** de cada loja (clássico ou urbano).
 - **WhatsApp**: número que recebe os pedidos de cada marca.
 - **Configurações › (marca)**: contato, redes sociais, políticas (troca, devolução,
   entrega, privacidade, termos), SEO e regra de frete.
@@ -94,6 +96,12 @@ Nada é inventado: o que não foi informado aparece como **“Configuração pen
 
 ## Funcionalidades (resumo)
 
+- **Visual**: na seleção de marca, o logo da FINA se desenha em círculo e o da BRAVUS
+  acompanha o cursor com um brilho dourado. A home de cada marca tem capa com moldura
+  (arco na FINA, recorte com bloco dourado na BRAVUS), faixa com o lema, índice de
+  categorias e bloco da marca. Nos cards, a foto troca para a segunda imagem ao passar o
+  mouse e os produtos surgem ao rolar a página. A foto do produto tem zoom que segue o
+  cursor. Tudo respeita a opção "reduzir movimento" do sistema.
 - **Loja**: seleção de marca, home por marca, categorias editáveis, busca (nome,
   categoria, SKU, cor, material), filtros (preço, tamanho, cor, categoria,
   disponibilidade, novidades, promoções), página de produto com galeria e variações,

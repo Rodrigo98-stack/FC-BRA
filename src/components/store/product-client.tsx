@@ -10,6 +10,7 @@ type Img = { url: string; alt: string | null };
 
 export function Gallery({ images, name }: { images: Img[]; name: string }) {
   const [active, setActive] = useState(0);
+  const [zoom, setZoom] = useState(false);
   if (!images.length) {
     return <div className="muted flex aspect-[4/5] items-center justify-center bg-brand-secondary text-sm">Imagem não informada</div>;
   }
@@ -24,14 +25,27 @@ export function Gallery({ images, name }: { images: Img[]; name: string }) {
             onClick={() => setActive(i)}
             aria-label={`Ver imagem ${i + 1} de ${images.length}`}
             aria-current={i === active}
-            className={`relative aspect-[4/5] w-16 shrink-0 overflow-hidden bg-brand-secondary lg:w-full ${i === active ? "ring-1 ring-[var(--brand-text)]" : "opacity-70 hover:opacity-100"}`}
+            className={`relative aspect-[4/5] w-16 shrink-0 overflow-hidden bg-brand-secondary transition-opacity lg:w-full ${i === active ? "ring-1 ring-[var(--brand-accent)]" : "opacity-60 hover:opacity-100"}`}
           >
             <SmartImage src={img.url} alt="" sizes="72px" />
           </button>
         ))}
       </div>
-      <div className="relative order-1 aspect-[4/5] overflow-hidden bg-brand-secondary lg:order-2">
-        <SmartImage src={current.url} alt={current.alt ?? name} sizes="(min-width: 1024px) 50vw, 100vw" priority />
+      <div
+        className="zoomable relative order-1 aspect-[4/5] cursor-zoom-in overflow-hidden bg-brand-secondary lg:order-2"
+        data-zoom={zoom ? "on" : "off"}
+        onPointerEnter={(e) => e.pointerType === "mouse" && setZoom(true)}
+        onPointerLeave={() => setZoom(false)}
+        onPointerMove={(e) => {
+          if (e.pointerType !== "mouse") return;
+          const r = e.currentTarget.getBoundingClientRect();
+          e.currentTarget.style.setProperty("--zx", `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
+          e.currentTarget.style.setProperty("--zy", `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
+        }}
+      >
+        <div key={current.url} className="fade-up absolute inset-0" style={{ animationDuration: "0.6s" }}>
+          <SmartImage src={current.url} alt={current.alt ?? name} sizes="(min-width: 1024px) 50vw, 100vw" priority />
+        </div>
       </div>
     </div>
   );

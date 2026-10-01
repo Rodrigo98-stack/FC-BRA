@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireActionAuth } from "@/server/auth/session";
 import { assertCan } from "@/server/rbac";
 import { formToObject, runAction, type ActionResult } from "@/server/action";
-import { saveCms, FONT_OPTIONS } from "@/server/services/cms";
+import { saveCms, FONT_OPTIONS, LOOK_OPTIONS } from "@/server/services/cms";
 import { clearDemoData } from "@/server/services/demo-data";
 import { schema, write } from "@/server/db";
 import { audit } from "@/server/audit";
@@ -33,10 +33,14 @@ export async function saveIdentityAction(brandId: string, _prev: ActionResult | 
         background: color,
         display: font,
         body: font,
+        look: z.enum(LOOK_OPTIONS.map((o) => o.value) as [string, ...string[]]),
+        logo_shows_name: z.string().optional(),
       })
       .parse(formToObject(form));
     await saveCms(auth, brandId, "identity", {
       logo_url: d.logo_url ?? null,
+      logo_shows_name: d.logo_shows_name === "on",
+      look: d.look,
       favicon_url: d.favicon_url ?? null,
       tagline: d.tagline ?? null,
       card_subtitle: d.card_subtitle ?? null,

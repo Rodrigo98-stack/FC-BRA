@@ -59,7 +59,7 @@ export function MobileNav({
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
           {open ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 8h16M4 16h16" />}
         </svg>
-        <span>{open ? "Fechar" : "Menu"}</span>
+        <span className="sr-only sm:not-sr-only">{open ? "Fechar" : "Menu"}</span>
       </button>
       {open && (
         <div id="mobile-nav" className="store fixed inset-x-0 bottom-0 top-[var(--header-h,64px)] z-40 overflow-y-auto border-t hairline px-6 py-8">

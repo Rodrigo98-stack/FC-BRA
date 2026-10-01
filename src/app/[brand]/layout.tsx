@@ -27,7 +27,7 @@ export default async function BrandLayout({ children, params }: Props) {
   const { brand, cms, categories } = await loadStore(slug);
   const fonts = googleFontsHref([cms.identity.typography.display, cms.identity.typography.body]);
   return (
-    <div className="store flex min-h-screen flex-col" style={themeStyle(cms.identity)} data-brand={brand.slug}>
+    <div className="store flex min-h-screen flex-col" style={themeStyle(cms.identity)} data-brand={brand.slug} data-look={cms.identity.look}>
       {fonts && <link rel="stylesheet" href={fonts} precedence="default" />}
       <StoreHeader brand={brand} cms={cms} categories={categories} />
       <main className="flex-1">{children}</main>

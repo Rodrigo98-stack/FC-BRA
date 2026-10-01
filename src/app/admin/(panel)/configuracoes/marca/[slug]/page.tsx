@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { guard } from "@/server/admin";
 import { can } from "@/server/rbac";
-import { FONT_OPTIONS, getBrandCms, googleFontsHref, POLICY_LABELS } from "@/server/services/cms";
-import { ActionForm, ImageField, SelectField, SubmitButton, TextAreaField, TextField } from "@/components/admin/client";
+import { FONT_OPTIONS, getBrandCms, googleFontsHref, LOOK_OPTIONS, POLICY_LABELS } from "@/server/services/cms";
+import { ActionForm, CheckboxField, ImageField, SelectField, SubmitButton, TextAreaField, TextField } from "@/components/admin/client";
 import { Badge, Forbidden, LinkButton, PageHeader, Panel } from "@/components/admin/ui";
 import { ColorField, InstitutionalImages, PalettePreview, ShippingFields } from "../../settings-client";
 import { saveContactAction, saveHomeAction, saveIdentityAction, savePoliciesAction, saveSeoAction, saveShippingAction } from "../../actions";
@@ -38,6 +38,7 @@ export default async function BrandSettings({ params }: { params: Promise<{ slug
             <ActionForm action={saveIdentityAction.bind(null, brand.id)} className="space-y-5">
               <div className="grid gap-4 sm:grid-cols-2">
                 <ImageField name="logo_url" label="Logo" defaultValue={id.logo_url} help={`Enquanto vazio, a loja mostra o nome e ${id.logo_placeholder}.`} className="sm:col-span-2" />
+                <CheckboxField name="logo_shows_name" label="O logo já traz o nome da marca escrito" defaultChecked={id.logo_shows_name} help="Marcado: a loja mostra só o logo. Desmarcado: mostra o símbolo e o nome ao lado." className="sm:col-span-2" />
                 <ImageField name="favicon_url" label="Favicon" defaultValue={id.favicon_url} help="PNG ou ICO quadrado, 64×64 px ou maior." className="sm:col-span-2" />
                 <TextField name="tagline" label="Frase da marca" defaultValue={id.tagline} />
                 <TextField name="card_subtitle" label="Subtítulo na seleção de marca" defaultValue={id.card_subtitle} />
@@ -55,6 +56,7 @@ export default async function BrandSettings({ params }: { params: Promise<{ slug
               <div className="grid gap-4 sm:grid-cols-2">
                 <SelectField name="display" label="Fonte de títulos" defaultValue={id.typography.display} options={fontOptions} />
                 <SelectField name="body" label="Fonte de texto" defaultValue={id.typography.body} options={fontOptions} />
+                <SelectField name="look" label="Estilo visual da loja" defaultValue={id.look} options={LOOK_OPTIONS} className="sm:col-span-2" />
               </div>
               <SubmitButton>Publicar identidade</SubmitButton>
             </ActionForm>
@@ -75,7 +77,7 @@ export default async function BrandSettings({ params }: { params: Promise<{ slug
             <ActionForm action={saveHomeAction.bind(null, brand.id)} className="space-y-4">
               <TextField name="hero_title" label="Título" defaultValue={cms.home.hero_title} placeholder={brand.name} />
               <TextField name="hero_subtitle" label="Subtítulo" defaultValue={cms.home.hero_subtitle} placeholder={id.tagline ?? ""} />
-              <ImageField name="hero_image_url" label="Imagem de capa" defaultValue={cms.home.hero_image_url} help="Horizontal, 1600×900 px ou maior." />
+              <ImageField name="hero_image_url" label="Imagem de capa" defaultValue={cms.home.hero_image_url} help="Vertical (4:5), 1200×1500 px ou maior." />
               <InstitutionalImages defaults={cms.home.institutional_images ?? []} />
               <SubmitButton variant="secondary">Salvar capa</SubmitButton>
             </ActionForm>

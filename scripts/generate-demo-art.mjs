@@ -8,7 +8,7 @@ fs.mkdirSync(out, { recursive: true });
 
 const themes = {
   light: { bg1: "#EFE9E5", bg2: "#E3DAD3", ink: "#3A2F29", accent: "#B39256", label: "#8C7E74" },
-  dark: { bg1: "#2C2D30", bg2: "#222326", ink: "#ECE7E1", accent: "#B87333", label: "#9C948A" },
+  dark: { bg1: "#2A2D32", bg2: "#1F2226", ink: "#ECE7E1", accent: "#B8955C", label: "#9C948A" },
 };
 
 // Silhuetas em traço (viewBox 200x260).
@@ -40,19 +40,23 @@ function product(name, themeKey, alt) {
 `;
 }
 
+// Capa DEMO na vertical (4:5), o formato das molduras da home.
 function hero(themeKey) {
   const t = themes[themeKey];
   const dark = themeKey === "dark";
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  const piece = dark ? art.camisa : art.vestido;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" width="1200" height="1500">
   <defs>
     <linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t.bg1}"/><stop offset="1" stop-color="${t.bg2}"/></linearGradient>
+    <radialGradient id="l" cx="0.5" cy="0.42" r="0.6"><stop offset="0" stop-color="${t.ink}" stop-opacity="${dark ? 0.12 : 0.06}"/><stop offset="1" stop-color="${t.ink}" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1600" height="900" fill="url(#h)"/>
-  <path d="M980 900 L980 300 Q980 120 1160 120 Q1340 120 1340 300 L1340 900 Z" fill="${t.ink}" opacity="${dark ? 0.07 : 0.05}"/>
-  <path d="M1040 900 L1040 320 Q1040 180 1160 180 Q1280 180 1280 320 L1280 900" fill="none" stroke="${t.accent}" stroke-width="2"/>
-  <circle cx="1160" cy="430" r="${dark ? 120 : 96}" fill="none" stroke="${t.ink}" stroke-opacity="0.25" stroke-width="1.5"/>
-  <line x1="120" y1="780" x2="760" y2="780" stroke="${t.ink}" stroke-opacity="0.18"/>
-  <text x="120" y="828" font-family="Helvetica, Arial, sans-serif" font-size="20" letter-spacing="8" fill="${t.label}">BANNER DEMO · SUBSTITUA EM BANNERS</text>
+  <rect width="1200" height="1500" fill="url(#h)"/>
+  <rect width="1200" height="1500" fill="url(#l)"/>
+  <circle cx="600" cy="640" r="${dark ? 420 : 400}" fill="none" stroke="${t.accent}" stroke-width="2" stroke-opacity="0.7"/>
+  <g transform="translate(${600 - 100 * 3.4} 210) scale(3.4)" fill="none" stroke="${t.ink}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">${piece}</g>
+  <ellipse cx="600" cy="1290" rx="300" ry="26" fill="${t.ink}" opacity="0.07"/>
+  <line x1="420" y1="1390" x2="780" y2="1390" stroke="${t.accent}" stroke-width="1.5"/>
+  <text x="600" y="1432" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="8" fill="${t.label}">BANNER DEMO · SUBSTITUA EM BANNERS</text>
 </svg>
 `;
 }

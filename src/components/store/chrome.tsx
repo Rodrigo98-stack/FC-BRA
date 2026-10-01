@@ -5,12 +5,12 @@ import { POLICY_LABELS } from "@/server/services/cms";
 import { CONFIG_PENDING } from "@/lib/format";
 import { formatPhone } from "@/lib/text";
 import { CartLink, MobileNav } from "./header-client";
-import { Wordmark } from "./ui";
+import { BrandLogo } from "./ui";
 
 export function StoreHeader({ brand, cms, categories }: { brand: Brand; cms: BrandCms; categories: Category[] }) {
   const nav = categories.filter((c) => c.isActive);
   return (
-    <header className="store sticky top-0 z-30 border-b hairline [--header-h:64px] lg:[--header-h:auto]" style={{ background: "var(--brand-bg)" }}>
+    <header className="store store-header sticky top-0 z-30 border-b hairline [--header-h:64px] lg:[--header-h:auto]">
       <div className="mx-auto grid max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center px-5 py-3 lg:px-10 lg:pt-6 lg:pb-0">
         <div className="flex items-center gap-6">
           <MobileNav brand={brand.slug} categories={nav.map((c) => ({ slug: c.slug, name: c.name }))} />
@@ -27,11 +27,11 @@ export function StoreHeader({ brand, cms, categories }: { brand: Brand; cms: Bra
           </form>
         </div>
         <Link href={`/${brand.slug}`} className="block text-center" aria-label={`${brand.name} — início`}>
-          <Wordmark
+          <BrandLogo
             name={brand.name}
-            logoUrl={cms.identity.logo_url}
-            placeholder={cms.identity.logo_placeholder}
-            className="text-[26px] tracking-[0.04em] sm:text-[32px] lg:text-[38px]"
+            identity={cms.identity}
+            variant="header"
+            nameClassName="text-[19px] tracking-[0.03em] sm:text-[28px] lg:text-[32px]"
           />
         </Link>
         <div className="flex items-center justify-end gap-6">
@@ -45,7 +45,7 @@ export function StoreHeader({ brand, cms, categories }: { brand: Brand; cms: Bra
         <ul className="flex flex-wrap justify-center gap-x-8 py-4 text-[13px]">
           {nav.map((c) => (
             <li key={c.id}>
-              <Link href={`/${brand.slug}/${c.slug}`} className="underline-offset-[6px] hover:underline" style={c.kind === "promocoes" ? { color: "var(--brand-accent)" } : undefined}>
+              <Link href={`/${brand.slug}/${c.slug}`} className="nav-link" style={c.kind === "promocoes" ? { color: "var(--brand-accent)" } : undefined}>
                 {c.name}
               </Link>
             </li>
@@ -68,11 +68,11 @@ export function StoreFooter({ brand, cms }: { brand: Brand; cms: BrandCms }) {
   const socials = Object.entries(cms.social).filter(([, v]) => !!v) as [string, string][];
   const policies = (Object.keys(POLICY_LABELS) as (keyof typeof POLICY_LABELS)[]).filter((k) => cms.policies[k]);
   return (
-    <footer className="store mt-24 border-t hairline">
+    <footer className={`store mt-24 border-t hairline ${cms.identity.look === "urbano" ? "grain" : ""}`}>
       <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-16 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
         <div>
-          <p className="font-display text-3xl">{brand.name}</p>
-          <p className="muted mt-3 max-w-xs text-sm leading-relaxed">{cms.identity.tagline ?? brand.positioning}</p>
+          <BrandLogo name={brand.name} identity={cms.identity} variant="footer" nameClassName="text-3xl" />
+          <p className="muted mt-4 max-w-xs text-sm leading-relaxed">{cms.identity.tagline ?? brand.positioning}</p>
         </div>
         <div className="text-sm">
           <h2 className="mb-4 font-medium">Atendimento</h2>

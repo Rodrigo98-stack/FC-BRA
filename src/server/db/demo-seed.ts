@@ -236,8 +236,8 @@ export async function seedDemoData(tx: Tx) {
     await tx.insert(schema.banners).values({
       brandId: b.id,
       placement: "home_hero",
-      title: b.slug === "bravus" ? "BANNER DEMO · Nova coleção" : "BANNER DEMO · Coleção atemporal",
-      subtitle: "Imagem e texto de demonstração — troque em Banners.",
+      title: b.slug === "bravus" ? "Nova coleção" : "Coleção atemporal",
+      subtitle: "Banner de demonstração — troque a imagem e o texto em Banners.",
       ctaLabel: "Ver novidades",
       imageUrl: `/demo/hero-${theme}.svg`,
       linkUrl: `/${b.slug}/novidades`,

@@ -1,11 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" width="1200" height="1500">
   <defs>
-    <linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2C2D30"/><stop offset="1" stop-color="#222326"/></linearGradient>
+    <linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A2D32"/><stop offset="1" stop-color="#1F2226"/></linearGradient>
+    <radialGradient id="l" cx="0.5" cy="0.42" r="0.6"><stop offset="0" stop-color="#ECE7E1" stop-opacity="0.12"/><stop offset="1" stop-color="#ECE7E1" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1600" height="900" fill="url(#h)"/>
-  <path d="M980 900 L980 300 Q980 120 1160 120 Q1340 120 1340 300 L1340 900 Z" fill="#ECE7E1" opacity="0.07"/>
-  <path d="M1040 900 L1040 320 Q1040 180 1160 180 Q1280 180 1280 320 L1280 900" fill="none" stroke="#B87333" stroke-width="2"/>
-  <circle cx="1160" cy="430" r="120" fill="none" stroke="#ECE7E1" stroke-opacity="0.25" stroke-width="1.5"/>
-  <line x1="120" y1="780" x2="760" y2="780" stroke="#ECE7E1" stroke-opacity="0.18"/>
-  <text x="120" y="828" font-family="Helvetica, Arial, sans-serif" font-size="20" letter-spacing="8" fill="#9C948A">BANNER DEMO · SUBSTITUA EM BANNERS</text>
+  <rect width="1200" height="1500" fill="url(#h)"/>
+  <rect width="1200" height="1500" fill="url(#l)"/>
+  <circle cx="600" cy="640" r="420" fill="none" stroke="#B8955C" stroke-width="2" stroke-opacity="0.7"/>
+  <g transform="translate(260 210) scale(3.4)" fill="none" stroke="#ECE7E1" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M78 44 L100 58 L122 44 L150 58 L166 120 L146 126 L136 90 L136 220 L64 220 L64 90 L54 126 L34 120 L50 58 Z" /><path d="M88 44 L100 70 L112 44" /><path d="M100 70 L100 220" /><circle cx="100" cy="96" r="1.8"/><circle cx="100" cy="126" r="1.8"/><circle cx="100" cy="156" r="1.8"/><circle cx="100" cy="186" r="1.8"/></g>
+  <ellipse cx="600" cy="1290" rx="300" ry="26" fill="#ECE7E1" opacity="0.07"/>
+  <line x1="420" y1="1390" x2="780" y2="1390" stroke="#B8955C" stroke-width="1.5"/>
+  <text x="600" y="1432" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="8" fill="#9C948A">BANNER DEMO · SUBSTITUA EM BANNERS</text>
 </svg>

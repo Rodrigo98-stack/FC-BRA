@@ -41,11 +41,12 @@ test.describe.serial("painel administrativo", () => {
 
   test("cadastra fornecedor e registra na auditoria", async ({ page }) => {
     await signIn(page);
+    const name = `Fornecedor E2E ${Date.now()}`;
     await page.goto("/admin/fornecedores/novo");
-    await page.getByLabel(/Nome \/ razão social/).fill("Fornecedor E2E");
+    await page.getByLabel(/Nome \/ razão social/).fill(name);
     await page.getByRole("button", { name: /Cadastrar fornecedor/ }).click();
     await expect(page).toHaveURL(/\/admin\/fornecedores$/);
-    await expect(page.getByRole("link", { name: "Fornecedor E2E" })).toBeVisible();
+    await expect(page.getByRole("link", { name })).toBeVisible();
     await page.goto("/admin/auditoria?q=fornecedores.criar");
     await expect(page.getByText("cadastrou fornecedor").first()).toBeVisible();
   });
