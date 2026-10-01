@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Permite liberar o primeiro acesso em deploys sem variáveis de ambiente:
+  // o SETUP_TOKEN presente no build é embutido apenas no código do servidor.
+  env: process.env.SETUP_TOKEN ? { FCBRA_SETUP_TOKEN: process.env.SETUP_TOKEN } : {},
   // PGlite (banco embutido do modo demonstração) e o driver postgres
   // precisam rodar como módulos Node nativos, fora do bundle do webpack.
   serverExternalPackages: ["@electric-sql/pglite", "postgres"],

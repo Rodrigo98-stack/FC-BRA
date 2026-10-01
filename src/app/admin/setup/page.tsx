@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { hasOwner } from "@/server/services/users";
+import { getSetupToken } from "@/server/setup-token";
 import { AuthShell } from "@/components/admin/auth-shell";
 import { ActionForm, SubmitButton, TextField } from "@/components/admin/client";
 import { setupOwner } from "../auth-actions";
@@ -8,8 +9,8 @@ export const metadata = { title: "Primeiro acesso" };
 
 export default async function SetupPage() {
   if (await hasOwner()) redirect("/admin/login");
-  const needsToken = !!process.env.SETUP_TOKEN || process.env.NODE_ENV === "production";
-  const tokenMissing = process.env.NODE_ENV === "production" && !process.env.SETUP_TOKEN;
+  const needsToken = !!getSetupToken() || process.env.NODE_ENV === "production";
+  const tokenMissing = process.env.NODE_ENV === "production" && !getSetupToken();
   return (
     <AuthShell
       title="Primeiro acesso"

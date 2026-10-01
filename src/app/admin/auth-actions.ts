@@ -14,6 +14,7 @@ import { acceptInvitation, createOwner, hasOwner, resetPasswordWithToken } from 
 import { audit } from "@/server/audit";
 import { ADMIN_BRAND_COOKIE } from "@/server/admin";
 import { zEmail, zRequired } from "@/server/validation";
+import { getSetupToken } from "@/server/setup-token";
 
 // Hash fixo para comparar quando o e-mail não existe (tempo de resposta uniforme).
 const DUMMY_HASH = "scrypt$16384$8$1$AAAAAAAAAAAAAAAAAAAAAA==$" + "A".repeat(86) + "==";
@@ -68,7 +69,7 @@ export async function setupOwner(_prev: ActionResult | null, form: FormData): Pr
     const meta = await getRequestMeta();
     await rateLimit(`setup:${meta.ip ?? "anon"}`, 10, 900);
     if (await hasOwner()) throw new AppError("O administrador principal já foi criado. Use a tela de login.");
-    const expected = process.env.SETUP_TOKEN;
+    const expected = getSetupToken();
     if (process.env.NODE_ENV === "production" && !expected) {
       throw new AppError("Configuração pendente: defina a variável SETUP_TOKEN no ambiente (Netlify) para liberar o primeiro acesso.");
     }
