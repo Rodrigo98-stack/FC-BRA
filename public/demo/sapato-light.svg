@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EFE9E5"/><stop offset="1" stop-color="#E3DAD3"/></linearGradient></defs>
+  <rect width="800" height="1000" fill="url(#g)"/>
+  <ellipse cx="400" cy="860" rx="220" ry="24" fill="#3A2F29" opacity="0.06"/>
+  <g transform="translate(245 160) scale(1.55)" fill="none" stroke="#3A2F29" stroke-width="2.47741935483871" stroke-linecap="round" stroke-linejoin="round"><path d="M30 176 Q34 150 60 150 L104 150 Q126 120 150 104 L166 112 Q160 150 172 176 L170 190 L32 190 Z" /><path d="M150 104 L160 190" /><path d="M32 190 L170 190" /></g>
+  <line x1="340" y1="930" x2="460" y2="930" stroke="#B39256" stroke-width="1.5"/>
+  <text x="400" y="962" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" letter-spacing="6" fill="#8C7E74">IMAGEM DEMO</text>
+</svg>

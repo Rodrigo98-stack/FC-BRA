@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/*
+ * Tokens. A loja usa as variáveis --brand-* (vindas do CMS de cada marca);
+ * o painel usa a escala neutra "stone" do Tailwind.
+ */
+/* Breakpoints da especificação (§25): 360 (base), 480, 768, 1024, 1280, 1440+ */
+@theme {
+  --breakpoint-xs: 30rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 90rem;
+}
+
+@theme inline {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-display, "Cormorant Garamond", Georgia, serif);
+  --font-body: var(--font-body, "Inter", system-ui, sans-serif);
+
+  --color-brand-primary: var(--brand-primary, #222222);
+  --color-brand-secondary: var(--brand-secondary, #eeeeee);
+  --color-brand-accent: var(--brand-accent, #999999);
+  --color-brand-text: var(--brand-text, #222222);
+  --color-brand-bg: var(--brand-bg, #ffffff);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-stone-50 text-stone-900 antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  input[type="number"]::-webkit-inner-spin-button {
+    opacity: 0.4;
+  }
+}
+
+@layer components {
+  /* Loja */
+  .store {
+    background: var(--brand-bg);
+    color: var(--brand-text);
+    font-family: var(--font-body);
+  }
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight, 400);
+  }
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.28em];
+  }
+  .hairline {
+    border-color: color-mix(in srgb, var(--brand-text) 14%, transparent);
+  }
+  .muted {
+    color: color-mix(in srgb, var(--brand-text) 62%, transparent);
+  }
+  .btn-brand {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+    background: var(--brand-text);
+    color: var(--brand-bg);
+  }
+  .btn-brand:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--brand-text) 85%, var(--brand-accent));
+  }
+  .btn-brand-outline {
+    @apply inline-flex items-center justify-center gap-2 border px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] transition-colors;
+    border-color: color-mix(in srgb, var(--brand-text) 40%, transparent);
+  }
+  .btn-brand-outline:hover {
+    border-color: var(--brand-text);
+  }
+  .store-input {
+    @apply w-full border bg-transparent px-3.5 py-3 text-[15px] outline-none transition-colors;
+    border-color: color-mix(in srgb, var(--brand-text) 22%, transparent);
+  }
+  .store-input:focus {
+    border-color: var(--brand-text);
+  }
+
+  /* Painel */
+  .admin-input {
+    @apply w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 shadow-xs outline-none transition placeholder:text-stone-400 focus:border-stone-900 focus:ring-2 focus:ring-stone-900/10 disabled:bg-stone-100 disabled:text-stone-500;
+  }
+  .admin-label {
+    @apply mb-1.5 block text-[13px] font-medium text-stone-700;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}

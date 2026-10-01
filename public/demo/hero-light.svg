@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EFE9E5"/><stop offset="1" stop-color="#E3DAD3"/></linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#h)"/>
+  <path d="M980 900 L980 300 Q980 120 1160 120 Q1340 120 1340 300 L1340 900 Z" fill="#3A2F29" opacity="0.05"/>
+  <path d="M1040 900 L1040 320 Q1040 180 1160 180 Q1280 180 1280 320 L1280 900" fill="none" stroke="#B39256" stroke-width="2"/>
+  <circle cx="1160" cy="430" r="96" fill="none" stroke="#3A2F29" stroke-opacity="0.25" stroke-width="1.5"/>
+  <line x1="120" y1="780" x2="760" y2="780" stroke="#3A2F29" stroke-opacity="0.18"/>
+  <text x="120" y="828" font-family="Helvetica, Arial, sans-serif" font-size="20" letter-spacing="8" fill="#8C7E74">BANNER DEMO · SUBSTITUA EM BANNERS</text>
+</svg>

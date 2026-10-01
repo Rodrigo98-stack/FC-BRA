@@ -1,0 +1,50 @@
+{
+  "name": "fc-bra",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FINA CLÁSSICA + BRAVUS — e-commerce multi-marca com painel administrativo unificado",
+  "scripts": {
+    "migrations:bundle": "node scripts/bundle-migrations.mjs",
+    "predev": "node scripts/bundle-migrations.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/bundle-migrations.mjs && tsx scripts/build-demo-snapshot.mts",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "node scripts/bundle-migrations.mjs && tsc --noEmit",
+    "pretest": "node scripts/bundle-migrations.mjs",
+    "test": "vitest run",
+    "db:migrate": "node scripts/bundle-migrations.mjs && tsx scripts/migrate.ts",
+    "db:seed-demo": "tsx scripts/seed-demo.ts",
+    "admin:create": "tsx scripts/create-admin.ts",
+    "demo:snapshot": "tsx scripts/build-demo-snapshot.mts",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@netlify/blobs": "^11.1.3",
+    "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.3",
+    "next": "^15.5.27",
+    "postgres": "^3.4.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.5",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.20.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
