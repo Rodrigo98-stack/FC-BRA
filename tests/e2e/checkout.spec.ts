@@ -6,6 +6,8 @@ import { expect, test } from "@playwright/test";
  * Usa os dados DEMO do modo demonstração.
  */
 test("cliente finaliza um pedido na BRAVUS", async ({ page }) => {
+  // O pedido abre o WhatsApp sozinho (wa.me); aqui só conferimos o link gerado.
+  await page.route("**://wa.me/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<title>wa.me</title>" }));
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.getByRole("link", { name: /BRAVUS/ }).first().click();
@@ -44,6 +46,10 @@ test("cliente finaliza um pedido na BRAVUS", async ({ page }) => {
   await expect(page).toHaveURL(/\/bravus\/pedido\/\d+\?t=/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Seu pedido foi registrado");
   await expect(page.getByText(/Pedido #BR-\d{6}/)).toBeVisible();
+  // A mensagem do carrinho vai para o WhatsApp da loja.
+  const href = await page.getByRole("link", { name: /Abrir WhatsApp e enviar pedido/ }).getAttribute("href");
+  expect(href).toMatch(/^https:\/\/wa\.me\/558173314464\?text=/);
+  expect(decodeURIComponent(href!)).toContain("Cliente Teste E2E");
 });
 
 test("página de confirmação exige a assinatura do pedido", async ({ page }) => {
