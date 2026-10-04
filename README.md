@@ -66,6 +66,11 @@ não têm senha. Para entrar como um deles e testar as permissões, abra o usuá
 
 Alternativa pela linha de comando: `DATABASE_URL=... npm run db:migrate`.
 
+## Convivência com o CRM
+
+O banco do Supabase é compartilhado com o CRM/PDV. As regras para um não atrapalhar o outro
+estão em [`docs/CONVIVENCIA-CRM.md`](docs/CONVIVENCIA-CRM.md). Leia antes de criar migrações.
+
 ## Variáveis de ambiente
 
 Todas documentadas em [`.env.example`](.env.example). Segredos ficam **somente** no
