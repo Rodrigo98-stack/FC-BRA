@@ -385,7 +385,62 @@
   font-weight: 500;
 }
 
+/* Efeitos da capa da FINA&CLÁSSICA (arco): estáticos aqui; os movimentos ficam abaixo, só
+   para quem não pediu "reduzir movimento". */
+.arch-glow {
+  background: radial-gradient(60% 55% at 50% 45%, color-mix(in srgb, var(--brand-accent) 38%, transparent), transparent 72%);
+  filter: blur(18px);
+  opacity: 0.55;
+}
+.arch-outline {
+  opacity: 0.7;
+}
+.arch-shine {
+  isolation: isolate;
+}
+.arch-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgb(255 244 214 / 0.5) 50%, transparent 62%) no-repeat;
+  background-size: 300% 100%;
+  background-position: 130% 0;
+  mix-blend-mode: soft-light;
+}
+.arch-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* vinheta suave que aprofunda as bordas do arco */
+  box-shadow: inset 0 0 70px rgb(60 40 20 / 0.18);
+}
+.sparkle {
+  opacity: 0.85;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .arch-reveal {
+    animation: arch-reveal 1.5s cubic-bezier(0.65, 0.05, 0.25, 1) 0.2s both;
+  }
+  .arch-reveal img {
+    animation: ken-burns 22s ease-out both;
+  }
+  .arch-shine::after {
+    animation: sheen 3.2s ease 1.6s 1 both, sheen 3.6s ease 9s infinite;
+  }
+  .arch-glow {
+    animation: glow-breathe 6s ease-in-out infinite;
+  }
+  .arch-outline {
+    animation: arch-draw 1.8s cubic-bezier(0.65, 0.05, 0.25, 1) 0.4s both;
+  }
+  .sparkle {
+    animation: twinkle 3.6s ease-in-out infinite;
+  }
   .logo-draw {
     -webkit-mask: conic-gradient(from 180deg, #000 var(--sweep), transparent 0);
     mask: conic-gradient(from 180deg, #000 var(--sweep), transparent 0);
@@ -433,6 +488,48 @@
   }
 }
 
+@keyframes arch-reveal {
+  from {
+    clip-path: inset(100% 0 0 0);
+    transform: scale(1.06);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+@keyframes arch-draw {
+  from {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 0.7;
+  }
+}
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.03);
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) rotate(45deg);
+  }
+}
 @keyframes logo-draw {
   from {
     --sweep: 0deg;

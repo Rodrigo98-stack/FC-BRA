@@ -2,10 +2,20 @@ import Link from "next/link";
 import { loadStore } from "@/server/store-context";
 import { getActiveBanners, listProducts } from "@/server/services/catalog";
 import { BrandLogo, Marquee, ProductGrid, RotatingBadge, SectionTitle, SmartImage } from "@/components/store/ui";
+import { Tilt } from "@/components/store/fx-client";
 
 type Props = { params: Promise<{ brand: string }> };
 
 const delay = (s: number) => ({ "--d": `${s}s` }) as React.CSSProperties;
+
+/** Estrela de quatro pontas que pisca (só decoração). */
+function Sparkle({ className, delay: d }: { className: string; delay: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className={`sparkle ${className}`} style={{ color: "var(--brand-accent)", animationDelay: d }}>
+      <path fill="currentColor" d="M12 0c.7 6.4 3.6 10.3 12 12-8.4 1.7-11.3 5.6-12 12-.7-6.4-3.6-10.3-12-12C8.4 10.3 11.3 6.4 12 0Z" />
+    </svg>
+  );
+}
 
 export default async function BrandHome({ params }: Props) {
   const { brand: slug } = await params;
@@ -30,7 +40,8 @@ export default async function BrandHome({ params }: Props) {
   const id = cms.identity;
   const urban = id.look === "urbano";
   const hero = heroBanners[0];
-  const heroImage = hero?.imageUrl ?? cms.home.hero_image_url;
+  // Imagem cadastrada em "Capa da home" vale mais que a do banner de demonstração.
+  const heroImage = hero?.isDemo ? (cms.home.hero_image_url ?? hero.imageUrl) : (hero?.imageUrl ?? cms.home.hero_image_url);
   // Banner DEMO: o selo "DEMO" fica visível; o prefixo técnico sai do título.
   const heroTitle = (hero?.title ?? cms.home.hero_title ?? brand.name).replace(/^BANNER DEMO · /, "");
   // Banner de demonstração não mostra o texto de exemplo; banners reais mostram o subtítulo cadastrado.
@@ -129,7 +140,23 @@ export default async function BrandHome({ params }: Props) {
           <div className="mx-auto grid max-w-[1400px] items-center gap-12 px-5 py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:px-10 lg:py-20">
             {heroText}
             <div className="fade-up relative mx-auto w-full max-w-[500px]" style={delay(0.3)}>
-              <div className="frame-arch relative aspect-[4/5] bg-brand-secondary">{heroMedia}</div>
+              {/* Brilho dourado que respira atrás do arco */}
+              <div aria-hidden className="arch-glow absolute -inset-8 -z-10 rounded-t-full" />
+              {/* Contorno em arco, um pouco afastado, que se desenha ao carregar */}
+              <div aria-hidden className="arch-outline frame-arch absolute -inset-3 border" style={{ borderColor: "var(--brand-accent)" }} />
+              <Tilt max={4}>
+                <div className="frame-arch arch-shine relative aspect-[4/5] bg-brand-secondary">
+                  <div className="arch-reveal absolute inset-0">{heroMedia}</div>
+                </div>
+              </Tilt>
+              {/* Estrelas douradas piscando, como as da ilustração */}
+              {heroImage && (
+                <>
+                  <Sparkle className="absolute -right-3 top-[14%] h-5 w-5 sm:-right-6 sm:h-7 sm:w-7" delay="0s" />
+                  <Sparkle className="absolute -left-4 top-[34%] h-3.5 w-3.5 sm:-left-8 sm:h-5 sm:w-5" delay="1.1s" />
+                  <Sparkle className="absolute -right-2 bottom-[18%] h-4 w-4 sm:-right-5 sm:h-5 sm:w-5" delay="2.2s" />
+                </>
+              )}
               {heroImage && id.tagline && (
                 <RotatingBadge
                   text={id.tagline}

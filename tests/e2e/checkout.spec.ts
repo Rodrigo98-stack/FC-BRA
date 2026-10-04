@@ -48,7 +48,7 @@ test("cliente finaliza um pedido na BRAVUS", async ({ page }) => {
   await expect(page.getByText(/Pedido #BR-\d{6}/)).toBeVisible();
   // A mensagem do carrinho vai para o WhatsApp da loja.
   const href = await page.getByRole("link", { name: /Abrir WhatsApp e enviar pedido/ }).getAttribute("href");
-  expect(href).toMatch(/^https:\/\/wa\.me\/558173314464\?text=/);
+  expect(href).toMatch(/^https:\/\/wa\.me\/5581973314464\?text=/);
   expect(decodeURIComponent(href!)).toContain("Cliente Teste E2E");
 });
 
