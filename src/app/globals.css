@@ -53,6 +53,12 @@
   .font-display {
     font-family: var(--font-display);
     font-weight: var(--display-weight, 400);
+    /* Fontes com eixo de tamanho óptico (Bodoni Moda) ficam no traço original (opsz 11), como
+       sempre foi na capa e no cabeçalho: com o ajuste automático do navegador os traços finos
+       somem em títulos grandes. Só os títulos marcados com .font-bodoni usam outro ajuste.
+       Fontes sem o eixo ignoram isto. */
+    font-optical-sizing: none;
+    font-variation-settings: "opsz" 11;
   }
   .eyebrow {
     @apply text-[11px] font-medium uppercase tracking-[0.28em];
