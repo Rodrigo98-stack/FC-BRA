@@ -4,6 +4,7 @@ import { computeShipping } from "@/lib/shipping";
 import { parseDecimal } from "@/lib/decimal";
 import { normalizePhone, slugify } from "@/lib/text";
 import { renderTemplate, renderItems, waLink } from "@/server/services/whatsapp";
+import { parsePolicy, policySummary } from "@/lib/text";
 import { toCsv, toXlsx } from "@/server/export";
 import { inflateRawSync } from "node:zlib";
 
@@ -55,5 +56,21 @@ describe("utilitários", () => {
     const compSize = xlsx.readUInt32LE(18);
     const data = inflateRawSync(xlsx.subarray(30 + nameLen, 30 + nameLen + compSize)).toString();
     expect(data).toContain("spreadsheetml");
+  });
+
+  it("política: títulos, listas e parágrafos", () => {
+    const blocks = parsePolicy("Intro\nem duas linhas\n\n## 1. Seção\n\nTexto da seção:\n• Item A;\n• Item B.\n\n- Item C");
+    expect(blocks).toEqual([
+      { type: "p", text: "Intro\nem duas linhas" },
+      { type: "h", text: "1. Seção" },
+      { type: "p", text: "Texto da seção:" },
+      { type: "ul", items: ["Item A;", "Item B."] },
+      { type: "ul", items: ["Item C"] },
+    ]);
+    expect(parsePolicy("   ")).toEqual([]);
+    const s = policySummary("## Título\n\nUma frase bem longa que passa do limite de caracteres definido para o resumo.", 30);
+    expect(s.length).toBeLessThanOrEqual(31);
+    expect(s.endsWith("…")).toBe(true);
+    expect(s).not.toContain("#");
   });
 });

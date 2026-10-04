@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatBRL } from "@/lib/format";
+import { parsePolicy } from "@/lib/text";
 import type { ProductCard as Card } from "@/server/services/catalog";
 import type { BrandIdentity } from "@/server/services/cms";
 
@@ -328,6 +329,40 @@ export function SectionTitle({ title, href, linkLabel }: { title: string; href?:
           {linkLabel ?? "Ver tudo"}
         </Link>
       )}
+    </div>
+  );
+}
+
+/** Texto de política com títulos de seção e listas (formatação simples; veja parsePolicy). */
+export function PolicyText({ text }: { text: string }) {
+  return (
+    <div className="space-y-5 text-[15px] leading-[1.75]">
+      {parsePolicy(text).map((b, i) => {
+        if (b.type === "h") {
+          return (
+            <h2 key={i} className="font-display border-t hairline pt-8 text-2xl leading-tight first:border-0 first:pt-0 sm:text-3xl [&:not(:first-child)]:mt-10">
+              {b.text}
+            </h2>
+          );
+        }
+        if (b.type === "ul") {
+          return (
+            <ul key={i} className="space-y-3">
+              {b.items.map((it, j) => (
+                <li key={j} className="relative pl-6">
+                  <span aria-hidden className="absolute left-0 top-[0.72em] h-1.5 w-1.5 rotate-45" style={{ background: "var(--brand-accent)" }} />
+                  {it}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        return (
+          <p key={i} className="whitespace-pre-line">
+            {b.text}
+          </p>
+        );
+      })}
     </div>
   );
 }

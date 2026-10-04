@@ -8,6 +8,7 @@ import { BuyBox, Gallery } from "@/components/store/product-client";
 import { ProductGrid, SectionTitle } from "@/components/store/ui";
 import { Track } from "@/components/store/track";
 import { CONFIG_PENDING } from "@/lib/format";
+import { policySummary } from "@/lib/text";
 import { getOrigin } from "@/server/request";
 
 type Props = { params: Promise<{ brand: string; category: string; product: string }> };
@@ -134,7 +135,14 @@ export default async function ProductPage({ params }: Props) {
                 <summary className="flex cursor-pointer list-none items-center justify-between">
                   {POLICY_LABELS[k]} <span className="muted transition-transform group-open:rotate-45">+</span>
                 </summary>
-                <div className="muted mt-3 whitespace-pre-line leading-relaxed">{cms.policies[k] ?? CONFIG_PENDING}</div>
+                <div className="muted mt-3 leading-relaxed">
+                  {cms.policies[k] ? policySummary(cms.policies[k]!, 280) : CONFIG_PENDING}
+                  {cms.policies[k] && cms.policies[k]!.length > 280 && (
+                    <Link href={`/${brand.slug}/politicas/${k}`} className="mt-3 block underline underline-offset-4" style={{ color: "var(--brand-text)" }}>
+                      Ler a política completa
+                    </Link>
+                  )}
+                </div>
               </details>
             ))}
           </div>

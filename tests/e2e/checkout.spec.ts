@@ -99,3 +99,17 @@ test("painel exige login", async ({ page }) => {
   await page.goto("/admin/pedidos");
   await expect(page).toHaveURL(/\/admin\/(login|setup)/);
 });
+
+test("política de troca aparece no rodapé e abre completa", async ({ page }) => {
+  await page.goto("/fina-classica");
+  await page.getByRole("link", { name: "Política de troca" }).first().click();
+  await expect(page).toHaveURL(/\/fina-classica\/politicas\/troca$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Política de troca" })).toBeVisible();
+  for (const titulo of ["1. Objeto e escopo", "2. Condições para aceitação da troca", "3. Forma de troca", "4. Produtos não elegíveis para troca", "5. Disposições gerais"]) {
+    await expect(page.getByRole("heading", { level: 2, name: titulo })).toBeVisible();
+  }
+  await expect(page.getByText(/30 \(trinta\) dias corridos/)).toBeVisible();
+  await expect(page.getByText(/Não há direito a reembolso em espécie/)).toBeVisible();
+  await expect(page.locator("article li")).toHaveCount(9);
+  await expect(page.getByRole("link", { name: /Falar no WhatsApp/ })).toHaveAttribute("href", /^https:\/\/wa\.me\/5581973314464\?text=/);
+});

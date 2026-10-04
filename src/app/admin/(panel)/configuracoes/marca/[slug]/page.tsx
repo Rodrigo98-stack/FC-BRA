@@ -107,7 +107,7 @@ export default async function BrandSettings({ params }: { params: Promise<{ slug
         </Panel>
       </div>
 
-      <Panel title="Políticas" description="Exibidas no rodapé e na página de produto.">
+      <Panel title="Políticas" description="Exibidas no rodapé e na página de produto. Formatação: “## Título” cria um título de seção, “• ” no início da linha cria uma lista, e uma linha em branco separa os blocos.">
         {canCms ? (
           <ActionForm action={savePoliciesAction.bind(null, brand.id)} className="grid gap-4 lg:grid-cols-2">
             {(Object.keys(POLICY_LABELS) as (keyof typeof POLICY_LABELS)[]).map((k) => (
