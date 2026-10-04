@@ -25,7 +25,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BrandLayout({ children, params }: Props) {
   const { brand: slug } = await params;
   const { brand, cms, categories } = await loadStore(slug);
-  const fonts = googleFontsHref([cms.identity.typography.display, cms.identity.typography.body]);
+  const fonts = googleFontsHref([
+    cms.identity.typography.display,
+    cms.identity.typography.body,
+    ...(cms.identity.look === "classico" ? ["Bodoni Moda"] : []),
+  ]);
   return (
     <div className="store flex min-h-screen flex-col" style={themeStyle(cms.identity)} data-brand={brand.slug} data-look={cms.identity.look}>
       {fonts && <link rel="stylesheet" href={fonts} precedence="default" />}

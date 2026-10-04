@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { loadStore } from "@/server/store-context";
 import { getActiveBanners, listProducts } from "@/server/services/catalog";
-import { BrandLogo, Marquee, ProductGrid, RotatingBadge, SectionTitle, SmartImage, Tag } from "@/components/store/ui";
+import { BrandLogo, Marquee, ProductGrid, RotatingBadge, SectionTitle, SmartImage } from "@/components/store/ui";
 
 type Props = { params: Promise<{ brand: string }> };
 
@@ -33,7 +33,8 @@ export default async function BrandHome({ params }: Props) {
   const heroImage = hero?.imageUrl ?? cms.home.hero_image_url;
   // Banner DEMO: o selo "DEMO" fica visível; o prefixo técnico sai do título.
   const heroTitle = (hero?.title ?? cms.home.hero_title ?? brand.name).replace(/^BANNER DEMO · /, "");
-  const heroSubtitle = hero?.subtitle ?? cms.home.hero_subtitle ?? id.tagline ?? brand.positioning;
+  // Banner de demonstração não mostra o texto de exemplo; banners reais mostram o subtítulo cadastrado.
+  const heroSubtitle = hero?.isDemo ? null : (hero?.subtitle ?? cms.home.hero_subtitle ?? id.tagline ?? brand.positioning);
   const novidades = categories.find((c) => c.kind === "novidades");
   const promocoes = categories.find((c) => c.kind === "promocoes");
   const standard = categories.filter((c) => c.kind === "padrao");
@@ -54,14 +55,9 @@ export default async function BrandHome({ params }: Props) {
         }}
       >
         <span className={urban ? "font-medium uppercase tracking-[0.2em]" : "muted"}>{id.card_subtitle ?? brand.audience}</span>
-        {hero?.isDemo && (
-          <span className="ml-3 align-middle">
-            <Tag>Demo</Tag>
-          </span>
-        )}
       </p>
       <h1
-        className={`fade-up font-display mt-5 ${urban ? "text-[clamp(3.4rem,8.5vw,8.5rem)] leading-[0.86]" : "text-[clamp(3.2rem,7vw,6.8rem)] leading-[0.95]"}`}
+        className={`fade-up font-display font-bodoni mt-5 ${urban ? "text-[clamp(3.4rem,8.5vw,8.5rem)] leading-[0.86]" : "text-[clamp(3.2rem,7vw,6.8rem)] leading-[0.95]"}`}
         style={delay(0.22)}
       >
         {heroTitle}
@@ -165,7 +161,7 @@ export default async function BrandHome({ params }: Props) {
           <ul className="flex flex-wrap items-baseline gap-x-8 gap-y-3 sm:gap-x-12">
             {standard.map((c) => (
               <li key={c.id}>
-                <Link href={`/${brand.slug}/${c.slug}`} className="cat-link font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
+                <Link href={`/${brand.slug}/${c.slug}`} className="cat-link font-display font-bodoni text-4xl leading-tight sm:text-5xl lg:text-6xl">
                   {c.name}
                 </Link>
               </li>

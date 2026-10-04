@@ -322,7 +322,7 @@ export function StorePagination({
 export function SectionTitle({ title, href, linkLabel }: { title: string; href?: string; linkLabel?: string }) {
   return (
     <div className="mb-8 flex items-end justify-between gap-6">
-      <h2 className="font-display text-4xl leading-none sm:text-5xl">{title}</h2>
+      <h2 className="font-display font-bodoni text-4xl leading-none sm:text-5xl">{title}</h2>
       {href && (
         <Link href={href} className="nav-link muted shrink-0 text-sm hover:opacity-100">
           {linkLabel ?? "Ver tudo"}

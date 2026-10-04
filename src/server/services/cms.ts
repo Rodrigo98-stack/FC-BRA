@@ -163,7 +163,13 @@ export function googleFontsHref(fonts: string[]): string | null {
   const allowed = [...new Set(fonts)].filter((f) => (FONT_OPTIONS as readonly string[]).includes(f));
   if (!allowed.length) return null;
   const families = allowed
-    .map((f) => `family=${encodeURIComponent(f).replace(/%20/g, "+")}:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400`)
+    .map((f) => {
+      const name = encodeURIComponent(f).replace(/%20/g, "+");
+      // Bodoni Moda tem eixo de tamanho óptico: em títulos grandes os traços finos ficam bem
+      // mais delicados (o contraste "de cartaz" da Bodoni). Pesos 400–900, sem 300.
+      if (f === "Bodoni Moda") return `family=${name}:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900`;
+      return `family=${name}:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400`;
+    })
     .join("&");
   return `https://fonts.googleapis.com/css2?${families}&display=swap`;
 }

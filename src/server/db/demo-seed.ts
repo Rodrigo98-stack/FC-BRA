@@ -237,7 +237,7 @@ export async function seedDemoData(tx: Tx) {
       brandId: b.id,
       placement: "home_hero",
       title: b.slug === "bravus" ? "Nova coleção" : "Coleção atemporal",
-      subtitle: "Banner de demonstração — troque a imagem e o texto em Banners.",
+      subtitle: null,
       ctaLabel: "Ver novidades",
       imageUrl: `/demo/hero-${theme}.svg`,
       linkUrl: `/${b.slug}/novidades`,

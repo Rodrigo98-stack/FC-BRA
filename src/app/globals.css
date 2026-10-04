@@ -367,6 +367,18 @@
   }
 }
 
+/* Títulos em Bodoni (estilo clássico). Fica fora das camadas para valer sobre a classe
+   font-display do Tailwind. Bodoni Poster e Bodoni 72 Smallcaps são fontes da Apple
+   (só em Mac/iPhone): entram apenas como reserva se a Bodoni Moda não carregar. */
+[data-look="classico"] .font-bodoni {
+  font-family: "Bodoni Moda", "Bodoni 72", "Bodoni MT", Didot, "Playfair Display", Georgia, serif;
+  /* Contraste moderado (opsz 24) e peso médio: mais presença de Bodoni de cartaz, mas o
+     "e" e os traços finos continuam legíveis em títulos grandes (opsz 60+ os apaga). */
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 24;
+  font-weight: 500;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .logo-draw {
     -webkit-mask: conic-gradient(from 180deg, #000 var(--sweep), transparent 0);
