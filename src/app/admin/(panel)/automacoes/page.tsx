@@ -62,7 +62,7 @@ export default async function AutomationsPage({ searchParams }: { searchParams: 
 
       <Panel
         title="Modelos de mensagem"
-        description={`Variáveis disponíveis: ${TEMPLATE_VARIABLES.join(", ")}. No modelo de finalização: {marca}, {numero}, {itens}, {subtotal}, {frete}, {total}, {nome}, {telefone}, {obs}.`}
+        description={`Variáveis disponíveis: ${TEMPLATE_VARIABLES.join(", ")}. No modelo de finalização: {marca}, {numero}, {itens}, {subtotal}, {frete}, {total}, {nome}, {telefone}, {obs}, {entrega}.`}
         actions={
           ctx.visibleBrands.length > 0 ? (
             <form className="flex items-center gap-2">

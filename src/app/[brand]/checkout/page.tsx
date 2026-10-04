@@ -8,7 +8,11 @@ export const metadata: Metadata = { title: "Finalizar pedido", robots: { index: 
 
 export default async function CheckoutPage({ params }: { params: Promise<{ brand: string }> }) {
   const { brand: slug } = await params;
-  const { brand } = await loadStore(slug);
+  const { brand, cms } = await loadStore(slug);
+  const pickup =
+    cms.pickup.enabled && cms.pickup.address
+      ? { address: cms.pickup.address, mapsUrl: cms.pickup.maps_url, notes: cms.pickup.notes }
+      : null;
   return (
     <div className="mx-auto max-w-[1400px] px-5 pt-10 lg:px-10 lg:pt-14">
       <nav aria-label="Trilha" className="muted mb-6 text-xs">
@@ -17,7 +21,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ brand
         <span aria-current="page">Finalizar pedido</span>
       </nav>
       <h1 className="font-display mb-10 text-5xl leading-none lg:text-6xl">Finalizar pedido</h1>
-      <CheckoutView brand={brand.slug} brandName={brand.name} states={BR_STATES} />
+      <CheckoutView brand={brand.slug} brandName={brand.name} states={BR_STATES} pickup={pickup} />
     </div>
   );
 }

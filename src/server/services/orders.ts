@@ -62,8 +62,10 @@ export const createOrderSchema = z.object({
   paymentMethod: z.string().max(40).nullable().optional(),
   discount: z.number().min(0).max(1_000_000).optional(),
   visitorId: z.string().max(80).nullable().optional(),
+  /** "retirada": o cliente busca na loja (sem frete, sem endereço do cliente). */
+  delivery: z.enum(["entrega", "retirada"]).default("entrega"),
 });
-export type CreateOrderInput = z.infer<typeof createOrderSchema>;
+export type CreateOrderInput = z.input<typeof createOrderSchema>;
 
 export type CreatedOrder = {
   id: string;
@@ -160,12 +162,20 @@ export async function createOrder(
 
     const subtotalCents = lines.reduce((s, l) => s + l.totalCents, 0);
     const discountCents = Math.min(toCents(input.discount ?? 0), subtotalCents);
-    const shipping = computeShipping(cms.shipping, (subtotalCents - discountCents) / 100);
+    const pickup = input.delivery === "retirada";
+    if (pickup && !(cms.pickup.enabled && cms.pickup.address)) {
+      throw new AppError("A retirada na loja não está disponível no momento. Escolha a entrega.", "app_error", { delivery: "Indisponível." });
+    }
+    const shipping = pickup
+      ? { amount: 0, label: "Retirada na loja (sem frete)", known: true }
+      : computeShipping(cms.shipping, (subtotalCents - discountCents) / 100);
     const shippingCents = toCents(shipping.amount);
     const totalCents = subtotalCents - discountCents + shippingCents;
 
-    // Cliente: cria ou atualiza pelo telefone normalizado.
-    const c = input.customer;
+    // Cliente: cria ou atualiza pelo telefone normalizado. Na retirada o endereço do
+    // cliente não é pedido nem alterado.
+    const c = pickup ? { ...input.customer, address: null, city: null, state: null, zip: null } : input.customer;
+    const pickupAddress = pickup ? `Retirada na loja: ${cms.pickup.address}` : null;
     const phoneNorm = normalizePhone(c.phone)!;
     const whatsapp = normalizePhone(c.whatsapp) ?? phoneNorm;
     const [existingCustomer] = await tx
@@ -206,7 +216,7 @@ export async function createOrder(
         customerPhone: c.phone,
         customerWhatsapp: whatsapp,
         customerEmail: c.email ?? null,
-        address: c.address ?? null,
+        address: pickupAddress ?? c.address ?? null,
         city: c.city ?? null,
         state: c.state ?? null,
         zip: c.zip ?? null,
@@ -267,6 +277,7 @@ export async function createOrder(
       customerName: c.name,
       customerPhone: c.phone,
       notes: c.notes ?? null,
+      delivery: pickupAddress ?? ([c.address, [c.city, c.state].filter(Boolean).join(" - ")].filter(Boolean).join(", ") || "A combinar"),
     });
     const whatsappUrl = ctx.source === "loja" ? waLink(storeNumber, message) : null;
     if (whatsappUrl) await tx.update(orders).set({ whatsappUrl }).where(eq(orders.id, order.id));

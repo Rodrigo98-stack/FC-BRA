@@ -5,7 +5,7 @@ import { FONT_OPTIONS, getBrandCms, googleFontsHref, LOOK_OPTIONS, POLICY_LABELS
 import { ActionForm, CheckboxField, ImageField, SelectField, SubmitButton, TextAreaField, TextField } from "@/components/admin/client";
 import { Badge, Forbidden, LinkButton, PageHeader, Panel } from "@/components/admin/ui";
 import { ColorField, InstitutionalImages, PalettePreview, ShippingFields } from "../../settings-client";
-import { saveContactAction, saveHomeAction, saveIdentityAction, savePoliciesAction, saveSeoAction, saveShippingAction } from "../../actions";
+import { saveContactAction, saveHomeAction, saveIdentityAction, savePickupAction, savePoliciesAction, saveSeoAction, saveShippingAction } from "../../actions";
 
 export const metadata = { title: "Configurações da marca" };
 
@@ -140,6 +140,19 @@ export default async function BrandSettings({ params }: { params: Promise<{ slug
             <ActionForm action={saveShippingAction.bind(null, brand.id)} className="space-y-4">
               <ShippingFields defaults={cms.shipping} />
               <SubmitButton variant="secondary">Salvar frete</SubmitButton>
+            </ActionForm>
+          ) : (
+            <p className="text-sm text-stone-600">Exige a permissão Configurações › Configurar.</p>
+          )}
+        </Panel>
+        <Panel title="Retirada na loja" description="Ativa a opção “Retirar na loja” no checkout, sem frete e sem pedir o endereço do cliente.">
+          {canConfig ? (
+            <ActionForm action={savePickupAction.bind(null, brand.id)} className="space-y-4">
+              <CheckboxField name="enabled" label="Oferecer retirada na loja" defaultChecked={cms.pickup.enabled} />
+              <TextField name="address" label="Endereço da loja" defaultValue={cms.pickup.address} placeholder="Rua, número, bairro" />
+              <TextField name="maps_url" label="Link do mapa (Google Maps)" defaultValue={cms.pickup.maps_url} placeholder="https://www.google.com/maps/…" />
+              <TextField name="notes" label="Aviso para o cliente (opcional)" defaultValue={cms.pickup.notes} placeholder="Ex.: horário de retirada" />
+              <SubmitButton variant="secondary">Salvar retirada</SubmitButton>
             </ActionForm>
           ) : (
             <p className="text-sm text-stone-600">Exige a permissão Configurações › Configurar.</p>

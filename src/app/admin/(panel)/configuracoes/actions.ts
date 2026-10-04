@@ -167,6 +167,32 @@ export async function saveShippingAction(brandId: string, _prev: ActionResult | 
   });
 }
 
+export async function savePickupAction(brandId: string, _prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  return runAction(async () => {
+    const auth = await requireActionAuth();
+    assertCan(auth.perms, "configuracoes", "configurar", brandId);
+    const d = z
+      .object({
+        enabled: z.string().optional(),
+        address: zOptionalText(200),
+        maps_url: zOptionalUrl,
+        notes: zOptionalText(200),
+      })
+      .parse(formToObject(form));
+    const enabled = d.enabled === "on";
+    if (enabled && !d.address) {
+      throw new AppError("Informe o endereço da loja para ativar a retirada.", "app_error", { address: "Obrigatório." });
+    }
+    await saveCms(auth, brandId, "pickup", {
+      enabled,
+      address: d.address ?? null,
+      maps_url: d.maps_url ?? null,
+      notes: d.notes ?? null,
+    });
+    return { ok: true, message: enabled ? "Retirada na loja ativada." : "Retirada na loja desativada." };
+  });
+}
+
 export async function saveSiteAction(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
   return runAction(async () => {
     const auth = await requireActionAuth();

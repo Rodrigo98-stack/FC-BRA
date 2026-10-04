@@ -47,6 +47,8 @@ export type ShippingConfig = {
   free_over: number | null;
   notes: string | null;
 };
+/** Retirada na loja (opção do checkout). */
+export type PickupConfig = { enabled: boolean; address: string | null; maps_url: string | null; notes: string | null };
 export type WhatsappConfig = { number: string | null; driver: "link" | "cloud_api"; cloud_phone_number_id: string | null };
 export type SiteConfig = { name: string; selection_title: string; favicon_url: string | null };
 
@@ -58,6 +60,7 @@ export type BrandCms = {
   policies: BrandPolicies;
   seo: BrandSeo;
   shipping: ShippingConfig;
+  pickup: PickupConfig;
   whatsapp: WhatsappConfig;
 };
 
@@ -88,6 +91,7 @@ const DEFAULT_BRAND: BrandCms = {
   policies: { troca: null, devolucao: null, entrega: null, privacidade: null, termos: null },
   seo: { title: null, description: null, og_image_url: null },
   shipping: { mode: "a_combinar", fixed_amount: null, free_over: null, notes: null },
+  pickup: { enabled: false, address: null, maps_url: null, notes: null },
   whatsapp: { number: null, driver: "link", cloud_phone_number_id: null },
 };
 

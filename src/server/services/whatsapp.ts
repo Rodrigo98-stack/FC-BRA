@@ -125,6 +125,8 @@ export type CheckoutMessageInput = {
   customerName: string;
   customerPhone: string;
   notes: string | null;
+  /** "Retirada na loja: …" ou o endereço de entrega. */
+  delivery: string;
 };
 
 export function renderItems(items: CheckoutMessageInput["items"]): string {
@@ -140,7 +142,7 @@ export async function buildCheckoutMessage(db: Executor, brandId: string, input:
   const tpl = await getTemplate(db, brandId, "checkout");
   const body =
     tpl?.body ??
-    "Olá! Gostaria de realizar um pedido.\n\nLoja: {marca}\nPedido: #{numero}\n\nProdutos:\n{itens}\n\nSubtotal: {subtotal}\nFrete: {frete}\nTotal: {total}\n\nNome: {nome}\nTelefone: {telefone}\nObservações: {obs}\n\nGostaria de confirmar meu pedido.";
+    "Olá! Gostaria de realizar um pedido.\n\nLoja: {marca}\nPedido: #{numero}\n\nProdutos:\n{itens}\n\nSubtotal: {subtotal}\nFrete: {frete}\nTotal: {total}\n\nEntrega: {entrega}\n\nNome: {nome}\nTelefone: {telefone}\nObservações: {obs}\n\nGostaria de confirmar meu pedido.";
   return renderTemplate(body, {
     marca: input.brandName,
     numero: input.orderNumber,
@@ -151,6 +153,7 @@ export async function buildCheckoutMessage(db: Executor, brandId: string, input:
     nome: input.customerName,
     telefone: input.customerPhone,
     obs: input.notes,
+    entrega: input.delivery,
   });
 }
 

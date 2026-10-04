@@ -104,19 +104,32 @@ export async function placeOrder(brandSlug: string, payload: unknown): Promise<A
         whatsappOptIn: z.boolean(),
         idempotencyKey: z.string().min(8).max(100),
         visitorId: z.string().max(80).nullable().optional(),
+        delivery: z.enum(["entrega", "retirada"]).nullable().optional(),
       })
       .parse(payload);
 
+    // Com a retirada na loja ativa, o cliente precisa escolher entre retirar e receber.
+    const cms = await getBrandCms(brand.id);
+    const pickupAvailable = cms.pickup.enabled && !!cms.pickup.address;
+    if (pickupAvailable && !p.delivery) {
+      throw new AppError("Escolha retirar na loja ou receber no seu endereço.", "app_error", { delivery: "Escolha uma opção." });
+    }
+    const delivery = pickupAvailable ? p.delivery! : "entrega";
+
     const c = p.customer as Record<string, string | null | undefined>;
     const missing: Record<string, string> = {};
-    for (const [key, label] of [
+    const required: [string, string][] = [
       ["name", "Nome"],
       ["phone", "Telefone"],
-      ["address", "Endereço"],
-      ["city", "Cidade"],
-      ["state", "Estado"],
-      ["zip", "CEP"],
-    ] as const) {
+      ...(delivery === "entrega"
+        ? ([
+            ["address", "Endereço"],
+            ["city", "Cidade"],
+            ["state", "Estado"],
+          ] as [string, string][])
+        : []),
+    ];
+    for (const [key, label] of required) {
       if (!c[key] || !String(c[key]).trim()) missing[key] = `${label} é obrigatório.`;
     }
     if (Object.keys(missing).length) throw new AppError("Preencha os campos obrigatórios.", "app_error", missing);
@@ -139,6 +152,7 @@ export async function placeOrder(brandSlug: string, payload: unknown): Promise<A
         whatsappOptIn: p.whatsappOptIn,
         idempotencyKey: p.idempotencyKey,
         visitorId: p.visitorId ?? null,
+        delivery,
       },
       { source: "loja" },
     );

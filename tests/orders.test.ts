@@ -42,6 +42,7 @@ describe("fluxo de pedido (§39)", () => {
     expect(order.total).toBeCloseTo(Number(variant.price) * 2, 2);
     expect(order.message).toContain("Gostaria de realizar um pedido");
     expect(order.message).toContain("Quantidade: 2");
+    expect(order.message).toContain("Entrega: Rua A, Recife - PE");
 
     // idempotência
     const again = await createOrder(
@@ -74,6 +75,40 @@ describe("fluxo de pedido (§39)", () => {
     const fin2 = rowsOf<{ s: number }>(await (await getDb()).execute(sql`select sum(amount)::float as s from financial_entries where order_id = ${order.id}`))[0];
     expect(fin2.s).toBeCloseTo(0, 2);
     await expect(changeOrderStatus(order.id, "pago", { actor })).rejects.toThrow();
+  });
+
+  it("retirada na loja: sem frete, endereço da loja no pedido e cadastro do cliente intacto", async () => {
+    const { getDb, rowsOf, schema } = await import("@/server/db");
+    const { createOrder } = await import("@/server/services/orders");
+    const db = await getDb();
+    const [fina] = await db.select().from(schema.brands).where(sql`slug = 'fina-classica'`);
+    const variant = rowsOf<{ id: string }>(
+      await db.execute(sql`select v.id from product_variants v join inventory i on i.variant_id = v.id
+        where v.brand_id = ${fina.id} and i.quantity >= 2 limit 1`),
+    )[0];
+    const base = { name: "Cliente Retirada", phone: "(81) 97777-0000", whatsapp: null, email: null, zip: null, notes: null };
+    await createOrder(
+      { brandId: fina.id, items: [{ variantId: variant.id, quantity: 1 }], customer: { ...base, address: "Rua do Cliente, 1", city: "Recife", state: "PE" } },
+      { source: "loja" },
+    );
+    const pickup = await createOrder(
+      {
+        brandId: fina.id,
+        items: [{ variantId: variant.id, quantity: 1 }],
+        customer: { ...base, address: "não deve ser usado", city: "Olinda", state: "PE" },
+        delivery: "retirada",
+      },
+      { source: "loja" },
+    );
+    const [row] = await db.select().from(schema.orders).where(sql`id = ${pickup.id}`);
+    expect(row.address).toBe("Retirada na loja: Rua Desembargador Oscar Coutinho, 15");
+    expect(row.city).toBeNull();
+    expect(Number(row.shipping)).toBe(0);
+    expect(row.shippingLabel).toMatch(/Retirada na loja/);
+    expect(pickup.message).toContain("Entrega: Retirada na loja: Rua Desembargador Oscar Coutinho, 15");
+    const [cust] = await db.select().from(schema.customers).where(sql`phone_normalized = '5581977770000'`);
+    expect(cust.address).toBe("Rua do Cliente, 1");
+    expect(cust.city).toBe("Recife");
   });
 
   it("não deixa misturar marcas nem vender acima do estoque", async () => {

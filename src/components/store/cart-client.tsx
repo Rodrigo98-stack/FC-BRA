@@ -158,20 +158,34 @@ const FIELD_LABELS: Record<string, string> = {
   phone: "Telefone",
   whatsapp: "WhatsApp",
   email: "E-mail (opcional)",
-  zip: "CEP",
   address: "Endereço (rua, número, complemento, bairro)",
   city: "Cidade",
   state: "Estado (UF)",
   notes: "Observações",
 };
 
-export function CheckoutView({ brand, brandName, states }: { brand: string; brandName: string; states: string[] }) {
+export type PickupInfo = { address: string; mapsUrl: string | null; notes: string | null };
+type Delivery = "entrega" | "retirada";
+
+export function CheckoutView({
+  brand,
+  brandName,
+  states,
+  pickup,
+}: {
+  brand: string;
+  brandName: string;
+  states: string[];
+  /** Retirada na loja ativa: o cliente escolhe entre retirar e receber. */
+  pickup: PickupInfo | null;
+}) {
   const mounted = useMounted();
   const router = useRouter();
   const items = useCart((s) => s.carts[brand]) ?? [];
   const clear = useCart((s) => s.clear);
   const { quote } = useQuote(brand, mounted ? items : []);
   const [sameWhatsapp, setSameWhatsapp] = useState(true);
+  const [delivery, setDelivery] = useState<Delivery | null>(pickup ? null : "entrega");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -215,6 +229,7 @@ export function CheckoutView({ brand, brandName, states }: { brand: string; bran
         whatsappOptIn: fd.get("optin") === "on",
         idempotencyKey: idempotencyKey.current,
         visitorId: getVisitorId(),
+        delivery,
       });
       if (!res.ok) {
         setErrors(res.fieldErrors ?? {});
@@ -264,22 +279,51 @@ export function CheckoutView({ brand, brandName, states }: { brand: string; bran
           </label>
           {!sameWhatsapp && field("whatsapp", { type: "tel", inputMode: "tel", required: true, className: "sm:col-span-2" })}
         </fieldset>
-        <fieldset className="grid gap-5 sm:grid-cols-6">
+        <fieldset className="space-y-5">
           <legend className="font-display mb-6 text-2xl">Entrega</legend>
-          {field("zip", { inputMode: "numeric", autoComplete: "postal-code", required: true, className: "sm:col-span-2" })}
-          {field("address", { autoComplete: "street-address", required: true, className: "sm:col-span-4" })}
-          {field("city", { autoComplete: "address-level2", required: true, className: "sm:col-span-4" })}
-          <div className="sm:col-span-2">
-            <label htmlFor="c-state" className="mb-1.5 block text-sm">{FIELD_LABELS.state}</label>
-            <select id="c-state" name="state" required defaultValue="" className="store-input" aria-invalid={!!errors.state || undefined}>
-              <option value="" disabled style={{ color: "#111" }}>UF</option>
-              {states.map((s) => (
-                <option key={s} value={s} style={{ color: "#111" }}>{s}</option>
-              ))}
-            </select>
-            {errors.state && <p className="mt-1 text-xs" style={{ color: "var(--brand-accent)" }}>{errors.state}</p>}
-          </div>
-          <div className="sm:col-span-6">
+          {pickup && (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <DeliveryOption
+                checked={delivery === "retirada"}
+                onSelect={() => setDelivery("retirada")}
+                title="Retirar na loja"
+              >
+                <span className="block">{pickup.address}</span>
+                {pickup.notes && <span className="mt-1 block">{pickup.notes}</span>}
+                <span className="mt-2 block" style={{ color: "var(--brand-accent)" }}>Sem custo de frete</span>
+              </DeliveryOption>
+              <DeliveryOption checked={delivery === "entrega"} onSelect={() => setDelivery("entrega")} title="Receber no meu endereço">
+                <span className="block">Informe o endereço, a cidade e o estado.</span>
+              </DeliveryOption>
+            </div>
+          )}
+          {errors.delivery && (
+            <p className="text-xs" role="alert" style={{ color: "var(--brand-accent)" }}>
+              Escolha retirar na loja ou receber no seu endereço.
+            </p>
+          )}
+          {delivery === "retirada" && pickup?.mapsUrl && (
+            <a href={pickup.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-block text-sm underline underline-offset-4">
+              Ver a loja no mapa
+            </a>
+          )}
+          {delivery === "entrega" && (
+            <div className="grid gap-5 sm:grid-cols-6">
+              {field("address", { autoComplete: "street-address", required: true, className: "sm:col-span-6" })}
+              {field("city", { autoComplete: "address-level2", required: true, className: "sm:col-span-4" })}
+              <div className="sm:col-span-2">
+                <label htmlFor="c-state" className="mb-1.5 block text-sm">{FIELD_LABELS.state}</label>
+                <select id="c-state" name="state" required defaultValue="" className="store-input" aria-invalid={!!errors.state || undefined}>
+                  <option value="" disabled style={{ color: "#111" }}>UF</option>
+                  {states.map((s) => (
+                    <option key={s} value={s} style={{ color: "#111" }}>{s}</option>
+                  ))}
+                </select>
+                {errors.state && <p className="mt-1 text-xs" style={{ color: "var(--brand-accent)" }}>{errors.state}</p>}
+              </div>
+            </div>
+          )}
+          <div>
             <label htmlFor="c-notes" className="mb-1.5 block text-sm">{FIELD_LABELS.notes}</label>
             <textarea id="c-notes" name="notes" rows={3} maxLength={1000} className="store-input" />
           </div>
@@ -314,11 +358,11 @@ export function CheckoutView({ brand, brandName, states }: { brand: string; bran
           </div>
           <div className="flex justify-between">
             <dt className="muted">Frete</dt>
-            <dd>{quote?.shipping.label ?? "…"}</dd>
+            <dd>{delivery === "retirada" ? "Retirada na loja" : (quote?.shipping.label ?? "…")}</dd>
           </div>
           <div className="flex justify-between border-t hairline pt-4 text-base">
             <dt>Total</dt>
-            <dd>{quote ? formatBRL(quote.total) : "…"}</dd>
+            <dd>{quote ? formatBRL(delivery === "retirada" ? quote.subtotal : quote.total) : "…"}</dd>
           </div>
         </dl>
         {formError && (
@@ -339,6 +383,35 @@ export function CheckoutView({ brand, brandName, states }: { brand: string; bran
         )}
       </aside>
     </form>
+  );
+}
+
+/** Cartão de escolha da entrega (rádio acessível). */
+function DeliveryOption({
+  checked,
+  onSelect,
+  title,
+  children,
+}: {
+  checked: boolean;
+  onSelect: () => void;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label
+      className="flex cursor-pointer gap-3 border p-4 transition-colors"
+      style={{
+        borderColor: checked ? "var(--brand-accent)" : "color-mix(in srgb, var(--brand-text) 22%, transparent)",
+        background: checked ? "color-mix(in srgb, var(--brand-accent) 10%, transparent)" : undefined,
+      }}
+    >
+      <input type="radio" name="delivery" checked={checked} onChange={onSelect} className="mt-1 accent-[var(--brand-accent)]" />
+      <span className="text-sm">
+        <span className="block font-medium">{title}</span>
+        <span className="muted mt-1 block">{children}</span>
+      </span>
+    </label>
   );
 }
 
