@@ -78,7 +78,7 @@ export function AdminShell({
         <Link href="/admin" className="block text-[13px] font-semibold tracking-[0.14em] text-stone-900">
           FC-BRA
         </Link>
-        <p className="text-xs text-stone-500">FINA CLÁSSICA + BRAVUS</p>
+        <p className="text-xs text-stone-500">FINA&CLÁSSICA + BRAVUS</p>
       </div>
       {brands.length > 1 && (
         <div className="px-3 pb-3">

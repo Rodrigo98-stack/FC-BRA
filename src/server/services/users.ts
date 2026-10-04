@@ -122,7 +122,7 @@ export async function inviteUser(
   if (isEmailConfigured()) {
     const res = await sendEmail(
       input.email,
-      "Convite para o painel FINA CLÁSSICA + BRAVUS",
+      "Convite para o painel FINA&CLÁSSICA + BRAVUS",
       `Olá${input.fullName ? `, ${input.fullName}` : ""}!\n\n${auth.user.fullName} convidou você para acessar o painel administrativo.\n\nAceite o convite e defina sua senha: ${link}\n\nO link expira em ${hours} horas.`,
     );
     emailSent = res.sent;
@@ -364,7 +364,7 @@ export async function createPasswordResetLink(auth: AuthContext, userId: string)
     emailSent = (
       await sendEmail(
         target.email,
-        "Redefinição de senha — painel FINA CLÁSSICA + BRAVUS",
+        "Redefinição de senha — painel FINA&CLÁSSICA + BRAVUS",
         `Olá, ${target.fullName}!\n\nUse o link abaixo para definir uma nova senha (válido por 24 horas):\n${link}`,
       )
     ).sent;

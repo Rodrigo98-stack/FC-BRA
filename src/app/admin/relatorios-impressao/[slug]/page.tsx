@@ -24,7 +24,7 @@ export default async function PrintReport({ params, searchParams }: { params: Pr
       <PrintOnLoad />
       <header className="mb-6 flex items-end justify-between border-b border-stone-300 pb-3">
         <div>
-          <p className="text-[10px] tracking-[0.16em] text-stone-500">FINA CLÁSSICA + BRAVUS</p>
+          <p className="text-[10px] tracking-[0.16em] text-stone-500">FINA&CLÁSSICA + BRAVUS</p>
           <h1 className="text-xl font-semibold">Relatório: {def.title}</h1>
           <p className="text-stone-600">
             {brandLabel}

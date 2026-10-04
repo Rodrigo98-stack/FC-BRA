@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = process.env.SITE_URL ?? (await getOrigin());
-  let name = "FINA CLÁSSICA + BRAVUS";
+  let name = "FINA&CLÁSSICA + BRAVUS";
   let favicon: string | null = null;
   try {
     const cms = await getAllCms();
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(base),
     title: { default: name, template: `%s · ${name}` },
-    description: "FINA CLÁSSICA (moda feminina) e BRAVUS (moda masculina).",
+    description: "FINA&CLÁSSICA (moda feminina) e BRAVUS (moda masculina).",
     icons: favicon ? { icon: favicon } : undefined,
   };
 }

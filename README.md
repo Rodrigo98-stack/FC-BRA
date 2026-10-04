@@ -1,7 +1,7 @@
-# FC-BRA · FINA CLÁSSICA + BRAVUS
+# FC-BRA · FINA&CLÁSSICA + BRAVUS
 
 E-commerce multi-marca com painel administrativo unificado: duas lojas visualmente
-independentes (FINA CLÁSSICA — moda feminina, BRAVUS — moda masculina) sobre um
+independentes (FINA&CLÁSSICA — moda feminina, BRAVUS — moda masculina) sobre um
 único backend, com pedidos finalizados pelo WhatsApp, estoque, financeiro, DRE,
 relatórios, analytics, CMS sem código e controle completo de usuários, funcionários
 e sócios (papéis, permissões granulares e escopo por marca).
@@ -85,7 +85,7 @@ Netlify — nunca no código.
 
 Nada é inventado: o que não foi informado aparece como **“Configuração pendente”**.
 
-- **Configurações › (marca) › Identidade visual**: os logos oficiais da FINA CLÁSSICA e da
+- **Configurações › (marca) › Identidade visual**: os logos oficiais da FINA&CLÁSSICA e da
   BRAVUS já estão instalados (arquivos em `public/brand/`), assim como os favicons. As
   cores da BRAVUS foram tiradas do logo (grafite e dourado); confirme ou troque pelas
   oficiais. Ali também ficam as fontes e o **estilo visual** de cada loja (clássico ou urbano).

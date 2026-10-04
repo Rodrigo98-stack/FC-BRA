@@ -31,6 +31,26 @@ export function SmartImage({
   );
 }
 
+/** Nome da marca; "&" ganha um ponto de quebra para o nome caber em telas estreitas. */
+export function BrandName({ name }: { name: string }) {
+  const parts = name.split("&");
+  return (
+    <>
+      {parts.map((part, i) => (
+        <span key={i}>
+          {i > 0 && (
+            <>
+              &amp;
+              <wbr />
+            </>
+          )}
+          {part}
+        </span>
+      ))}
+    </>
+  );
+}
+
 /** Logo da marca ou, enquanto não houver, o nome + placeholder explícito (§4). */
 export function Wordmark({
   name,
@@ -51,7 +71,9 @@ export function Wordmark({
   }
   return (
     <span className={`inline-flex flex-col items-center ${className ?? ""}`}>
-      <span className="font-display leading-none">{name}</span>
+      <span className="font-display leading-none">
+        <BrandName name={name} />
+      </span>
       {showPlaceholder && (
         <span className="mt-2 text-[10px] font-normal tracking-[0.12em] opacity-50" title="Envie o logo em Configurações › Identidade visual">
           {placeholder}
@@ -118,7 +140,9 @@ export function BrandLogo({
   return (
     <span className={`inline-flex items-center ${stacked ? "flex-col gap-6" : "gap-3"}`}>
       {logo}
-      <span className={`font-display leading-none ${nameClassName ?? ""}`}>{name}</span>
+      <span className={`font-display leading-none ${nameClassName ?? ""}`}>
+        <BrandName name={name} />
+      </span>
     </span>
   );
 }

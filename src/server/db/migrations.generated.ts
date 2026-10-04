@@ -23,5 +23,9 @@ export const MIGRATIONS: { name: string; sql: string }[] = [
   {
     "name": "20261001000006_whatsapp_pedidos.sql",
     "sql": "-- =============================================================================\n-- FC-BRA · Migration 0006 — WhatsApp que recebe os pedidos\n--\n-- Número informado pelo cliente (wa.me/558173314464, o mesmo do Instagram):\n-- DDI 55 + DDD 81 + 7331-4464. Vale para as duas lojas (modelo geral) e também\n-- aparece no rodapé de cada uma. Só preenche onde o número ainda está vazio,\n-- para nunca sobrescrever o que já foi definido em WhatsApp, no painel.\n-- =============================================================================\n\nupdate public.cms_content\nset value = jsonb_set(value, '{number}', '\"558173314464\"'::jsonb, true)\nwhere key = 'whatsapp'\n  and coalesce(value->>'number', '') = '';\n"
+  },
+  {
+    "name": "20261001000007_nome_fina_e_classica.sql",
+    "sql": "-- =============================================================================\n-- FC-BRA · Migration 0007 — nome da marca: FINA&CLÁSSICA\n--\n-- O nome oficial usa \"&\" (FINA&CLÁSSICA). Atualiza o nome da marca e o nome do\n-- site. O endereço da loja (slug \"fina-classica\") e o prefixo dos pedidos (FC)\n-- não mudam. Só altera se ainda estiver com o nome antigo.\n-- =============================================================================\n\nupdate public.brands\nset name = 'FINA&CLÁSSICA'\nwhere slug = 'fina-classica' and name = 'FINA CLÁSSICA';\n\nupdate public.cms_content\nset value = jsonb_set(value, '{name}', '\"FINA&CLÁSSICA + BRAVUS\"'::jsonb)\nwhere brand_id is null and key = 'site' and value->>'name' = 'FINA CLÁSSICA + BRAVUS';\n"
   }
 ];

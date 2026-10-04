@@ -105,7 +105,7 @@ export const getAllCms = requestCache(async () => {
   const db = await getDb();
   const rows = await db.select().from(schema.cmsContent);
   const byBrand = new Map<string, BrandCms>();
-  let site: SiteConfig = { name: "FINA CLÁSSICA + BRAVUS", selection_title: "ESCOLHA SUA EXPERIÊNCIA", favicon_url: null };
+  let site: SiteConfig = { name: "FINA&CLÁSSICA + BRAVUS", selection_title: "ESCOLHA SUA EXPERIÊNCIA", favicon_url: null };
   let globalWhatsapp: { number: string | null } = { number: null };
   for (const row of rows) {
     if (!row.brandId) {

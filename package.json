@@ -2,7 +2,7 @@
   "name": "fc-bra",
   "version": "0.1.0",
   "private": true,
-  "description": "FINA CLÁSSICA + BRAVUS — e-commerce multi-marca com painel administrativo unificado",
+  "description": "FINA&CLÁSSICA + BRAVUS — e-commerce multi-marca com painel administrativo unificado",
   "scripts": {
     "migrations:bundle": "node scripts/bundle-migrations.mjs",
     "predev": "node scripts/bundle-migrations.mjs",

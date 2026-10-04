@@ -14,7 +14,7 @@ export default async function TeamPrint() {
   return (
     <main className="mx-auto max-w-[1100px] bg-white p-8 text-[11px]">
       <PrintOnLoad />
-      <h1 className="text-xl font-semibold">Equipe · FINA CLÁSSICA + BRAVUS</h1>
+      <h1 className="text-xl font-semibold">Equipe · FINA&CLÁSSICA + BRAVUS</h1>
       <p className="mb-4 text-stone-500">Gerado em {formatDateTime(new Date())} por {ctx.auth.user.fullName}</p>
       <table className="w-full border-collapse">
         <thead>
